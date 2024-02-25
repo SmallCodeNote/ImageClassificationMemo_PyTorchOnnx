@@ -30,7 +30,6 @@ namespace DeployONNX
 
         }
 
-
         private void Form1_Load(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -98,10 +97,7 @@ namespace DeployONNX
             //BlackFlag
             createTestImage_Flagment(Path.Combine(topDirectoryPath, "06", "BlackFlag.png"), imageSizeString, defSize, 50, Brushes.Black);
 
-
         }
-
-
 
 
         private void createTestImage_Dot(string filename, string imageSize, float dotDiameter, int imgCount, Brush brush)
