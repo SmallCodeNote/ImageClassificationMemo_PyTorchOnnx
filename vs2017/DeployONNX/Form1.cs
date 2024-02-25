@@ -4,18 +4,19 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
-
-using WinFormStringCnvClass;
 
 using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
+
+
+using WinFormStringCnvClass;
 
 
 namespace DeployONNX
@@ -240,6 +241,82 @@ namespace DeployONNX
 
             textBox_LoadOnnxFileInfo.Text = string.Join("\r\n", Lines.ToArray());
 
+        }
+
+        private void button_ONNX_Prediction_Click(object sender, EventArgs e)
+        {
+            string modelPath = textBox_LoadOnnxFilename.Text;
+
+
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "PNG|*.png";
+            if (ofd.ShowDialog() != DialogResult.OK) return;
+
+            string imagePath = ofd.FileName;
+
+            try
+            {
+                using (var session = new InferenceSession(modelPath))
+                {
+                    Console.WriteLine("モデルの読み込みに成功しました。");
+                    float[] imageData = LoadImageData(imagePath);
+                    Memory<float> memory = new Memory<float>(imageData);
+
+                    ReadOnlySpan<int> dimensions = new int[] { 1, 3, 224, 224 };
+
+                    // DenseTensorを作成します。
+                    DenseTensor<float> inputTensor = new DenseTensor<float>(memory, dimensions);
+
+                    var inputs = new NamedOnnxValue[] { NamedOnnxValue.CreateFromTensor("data_0", inputTensor) };
+
+                    // 推論の実行
+                    using (var results = session.Run(inputs))
+                    {
+                        // 出力データの取得
+                        var outputData = results.FirstOrDefault(item => item.Name == "prob_1").AsTensor<float>().ToArray();
+                        Console.WriteLine($"出力データ: {string.Join(", ", outputData)}");
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"推論の実行中にエラーが発生しました: {ex.Message}");
+            }
+        }
+
+
+        public float[] LoadImageData(string imagePath)
+        {
+            // 画像を読み込みます。
+            Bitmap bitmap = new Bitmap(imagePath);
+
+            // 画像を224x224にリサイズします。
+            Bitmap resizedBitmap = new Bitmap(bitmap, new Size(224, 224));
+
+            // RGBチャンネル用の配列を作成します。
+            float[] imageData = new float[3 * 224 * 224];
+
+            // Bitmapをロックしてピクセルデータにアクセスします。
+            BitmapData bitmapData = resizedBitmap.LockBits(new Rectangle(0, 0, resizedBitmap.Width, resizedBitmap.Height), ImageLockMode.ReadOnly, resizedBitmap.PixelFormat);
+
+            // ピクセルデータをbyte配列にコピーします。
+            byte[] pixelData = new byte[bitmapData.Stride * bitmapData.Height];
+            System.Runtime.InteropServices.Marshal.Copy(bitmapData.Scan0, pixelData, 0, pixelData.Length);
+
+            // Bitmapのロックを解除します。
+            resizedBitmap.UnlockBits(bitmapData);
+
+            // ピクセルデータをfloat配列に変換します。
+            for (int i = 0; i < pixelData.Length; i += 3)
+            {
+                // BitmapデータはBGR形式なので、RGB形式に変換します。
+                imageData[i / 3] = pixelData[i + 2] / 255.0f; // R
+                imageData[i / 3 + 1] = pixelData[i + 1] / 255.0f; // G
+                imageData[i / 3 + 2] = pixelData[i] / 255.0f; // B
+            }
+
+            return imageData;
         }
     }
 }
