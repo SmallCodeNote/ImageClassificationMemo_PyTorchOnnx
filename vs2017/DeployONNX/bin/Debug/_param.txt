@@ -1,1 +1,5 @@
-
+textBox_LoadOnnxFileInfo	ProducerName: pytorch\\r\\\\n\\Version: 9223372036854775807\\r\\\\n\\Description: \\r\\\\n\\//Input//\\r\\\\n\\ Key: input.1, \\r\\\\n\\ Value.ElementType: System.Single,\\r\\\\n\\ Value.Dimensions: 1,3,224,224\\r\\\\n\\//Output//\\r\\\\n\\ Key: 495,\\r\\\\n\\ Value.ElementType: System.Single,\\r\\\\n\\ Value.Dimensions: 1,1000
+textBox_LoadOnnxFileInfo_Size	224,224
+textBox_LoadOnnxFilename	R:\resnet50.onnx
+textBox_CreateTestImage_Size	224,224
+textBox_CreateTestImage_TargetDir	
