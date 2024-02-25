@@ -1,0 +1,15 @@
+//Ref//
+https://code.visualstudio.com/docs/python/python-tutorial#_start-vs-code-in-a-project-workspace-folder
+
+
+//Ref//
+https://code.visualstudio.com/docs/python/python-tutorial#_create-a-virtual-environment
+
+Python: Create Environment
+Venv
+Python 3.9
+
+https://pytorch.org/tutorials//beginner/onnx/export_simple_model_to_onnx_tutorial.html
+
+py -m pip install --upgrade pip
+py -m pip install torch torchvision torchaudio onnx
