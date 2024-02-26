@@ -247,7 +247,6 @@ namespace DeployONNX
         {
             string modelPath = textBox_LoadOnnxFilename.Text;
 
-
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "PNG|*.png";
             if (ofd.ShowDialog() != DialogResult.OK) return;
@@ -318,5 +317,121 @@ namespace DeployONNX
 
             return imageData;
         }
+
+        private void button_ONNX_Prediction2_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "PNG|*.png";
+            if (ofd.ShowDialog() != DialogResult.OK) return;
+            /*
+                        var mlContext = new MLContext();
+
+                        var data = mlContext.Data.LoadFromTextFile<ImageNetData>(textBox_CreateFileList.Text, separatorChar: ',');
+
+                        var pipeline = mlContext.Transforms.LoadImages(outputColumnName: "image", imageFolder: "", inputColumnName: nameof(ImageNetData.ImagePath))
+                            .Append(mlContext.Transforms.ResizeImages(outputColumnName: "image", imageWidth: 224, imageHeight: 224, inputColumnName: "image"))
+                            .Append(mlContext.Transforms.ExtractPixels(outputColumnName: "image"))
+                        //.Append(mlContext.Transforms.ApplyOnnxModel(modelFile: textBox_LoadOnnxFilename.Text, outputColumnNames: new[] { "softmax2" }, inputColumnNames: new[] { "image" }));
+                        .Append(mlContext.Transforms.ApplyOnnxModel(modelFile: textBox_LoadOnnxFilename.Text, outputColumnNames: new[] { "495" }, inputColumnNames: new[] { "input.1" }));
+
+                        var model = pipeline.Fit(data);
+
+                        var predictionEngine = mlContext.Model.CreatePredictionEngine<ImageNetData, ImageNetPrediction>(model);
+
+                        var prediction = predictionEngine.Predict(new ImageNetData { ImagePath = ofd.FileName });
+
+                        Console.WriteLine($"Predicted label: {prediction.PredictedLabels.Max()}");
+
+                        Console.ReadLine();
+              */
+
+            var mlContext = new MLContext();
+
+            List<InputData> inputDatas = new List<InputData>();
+            inputDatas.Add(new InputData(ofd.FileName));
+
+            var data = mlContext.Data.LoadFromEnumerable(inputDatas);
+
+            var pipeline = mlContext.Transforms.ApplyOnnxModel(textBox_LoadOnnxFilename.Text);
+
+            var transformedData = pipeline.Fit(data).Transform(data);
+
+            var predictions = mlContext.Data.CreateEnumerable<ImageNetPrediction>(transformedData, reuseRowObject: false).ToList();
+
+            foreach (var prediction in predictions)
+            {
+                Console.WriteLine($"Prediction: {prediction.PredictedLabels}");
+            }
+
+        }
+
+        private void button_CreateFileList_Click(object sender, EventArgs e)
+        {
+
+            string targetDir = textBox_CreateFileListPath_TargetDir.Text;
+
+            if (Directory.Exists(targetDir))
+            {
+                SaveFileDialog sfd = new SaveFileDialog();
+                sfd.Filter = "CSV|*.csv";
+                sfd.FileName = textBox_CreateFileList.Text;
+                if (sfd.ShowDialog() != DialogResult.OK) return;
+
+
+                string[] FileList = Directory.GetFiles(targetDir, "*.png", SearchOption.AllDirectories);
+                List<string> Lines = new List<string>();
+
+                foreach (var filename in FileList)
+                {
+                    string className = Path.GetFileName(Path.GetDirectoryName(filename));
+                    Lines.Add(filename + "," + className);
+
+                }
+
+                File.WriteAllText(sfd.FileName, string.Join("\r\n", Lines.ToArray()));
+
+                textBox_CreateFileList.Text = sfd.FileName;
+            }
+        }
     }
+
+    public class InputData
+    {
+        [VectorType(1, 3, 224, 224)]
+        [ColumnName("input.1")]
+        public float[] Features { get; set; }
+
+
+        public InputData(string imagePath)
+        {
+            var bitmap = new Bitmap(Image.FromFile(imagePath));
+            Features = ConvertImage(bitmap);
+        }
+
+        private float[] ConvertImage(Bitmap image)
+        {
+            var resized = new Bitmap(image, new Size(224, 224));
+            var data = new float[3 * 224 * 224];
+            for (int y = 0; y < resized.Height; y++)
+            {
+                for (int x = 0; x < resized.Width; x++)
+                {
+                    var color = resized.GetPixel(x, y);
+                    data[y * resized.Width + x] = color.R;
+                    data[y * resized.Width + x + 224 * 224] = color.G;
+                    data[y * resized.Width + x + 2 * 224 * 224] = color.B;
+                }
+            }
+            return data;
+        }
+
+    }
+
+    public class ImageNetPrediction
+    {
+        //[ColumnName("softmax2")]
+        [ColumnName("495")]
+        public float[] PredictedLabels;
+    }
+
 }
