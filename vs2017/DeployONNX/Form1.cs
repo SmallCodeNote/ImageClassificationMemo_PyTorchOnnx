@@ -79,6 +79,8 @@ namespace DeployONNX
             string imageSizeString = textBox_CreateTestImage_Size.Text;
             float defSize = 20.0f;
 
+            int imgCount = int.Parse(textBox_CreateTestImage_imgCount.Text);
+
             //RedDot
             createTestImage_Dot(Path.Combine(topDirectoryPath, "01", "RedDot.png"), imageSizeString, defSize, 50, Brushes.Red);
 

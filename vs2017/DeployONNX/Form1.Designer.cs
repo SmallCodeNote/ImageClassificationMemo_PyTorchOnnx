@@ -42,9 +42,13 @@
             this.button_CreateTestImage_Run = new System.Windows.Forms.Button();
             this.textBox_CreateTestImage_TargetDir = new System.Windows.Forms.TextBox();
             this.tabPage_CreateFileList = new System.Windows.Forms.TabPage();
+            this.textBox_CreateFileList = new System.Windows.Forms.TextBox();
             this.textBox_CreateFileListPath_TargetDir = new System.Windows.Forms.TextBox();
             this.button_CreateFileList = new System.Windows.Forms.Button();
-            this.textBox_CreateFileList = new System.Windows.Forms.TextBox();
+            this.textBox_CreateTestImage_imgCount = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage_ONNX.SuspendLayout();
             this.tabPage_CreateTestImage.SuspendLayout();
@@ -144,8 +148,12 @@
             // 
             // tabPage_CreateTestImage
             // 
+            this.tabPage_CreateTestImage.Controls.Add(this.label4);
+            this.tabPage_CreateTestImage.Controls.Add(this.label3);
+            this.tabPage_CreateTestImage.Controls.Add(this.label2);
             this.tabPage_CreateTestImage.Controls.Add(this.textBox_CreateTestImage_Size);
             this.tabPage_CreateTestImage.Controls.Add(this.button_CreateTestImage_Run);
+            this.tabPage_CreateTestImage.Controls.Add(this.textBox_CreateTestImage_imgCount);
             this.tabPage_CreateTestImage.Controls.Add(this.textBox_CreateTestImage_TargetDir);
             this.tabPage_CreateTestImage.Location = new System.Drawing.Point(4, 22);
             this.tabPage_CreateTestImage.Name = "tabPage_CreateTestImage";
@@ -157,7 +165,7 @@
             // 
             // textBox_CreateTestImage_Size
             // 
-            this.textBox_CreateTestImage_Size.Location = new System.Drawing.Point(98, 8);
+            this.textBox_CreateTestImage_Size.Location = new System.Drawing.Point(98, 29);
             this.textBox_CreateTestImage_Size.Name = "textBox_CreateTestImage_Size";
             this.textBox_CreateTestImage_Size.Size = new System.Drawing.Size(100, 19);
             this.textBox_CreateTestImage_Size.TabIndex = 2;
@@ -165,9 +173,9 @@
             // 
             // button_CreateTestImage_Run
             // 
-            this.button_CreateTestImage_Run.Location = new System.Drawing.Point(6, 6);
+            this.button_CreateTestImage_Run.Location = new System.Drawing.Point(6, 14);
             this.button_CreateTestImage_Run.Name = "button_CreateTestImage_Run";
-            this.button_CreateTestImage_Run.Size = new System.Drawing.Size(75, 23);
+            this.button_CreateTestImage_Run.Size = new System.Drawing.Size(75, 36);
             this.button_CreateTestImage_Run.TabIndex = 1;
             this.button_CreateTestImage_Run.Text = "Run";
             this.button_CreateTestImage_Run.UseVisualStyleBackColor = true;
@@ -175,7 +183,7 @@
             // 
             // textBox_CreateTestImage_TargetDir
             // 
-            this.textBox_CreateTestImage_TargetDir.Location = new System.Drawing.Point(6, 35);
+            this.textBox_CreateTestImage_TargetDir.Location = new System.Drawing.Point(6, 72);
             this.textBox_CreateTestImage_TargetDir.Name = "textBox_CreateTestImage_TargetDir";
             this.textBox_CreateTestImage_TargetDir.Size = new System.Drawing.Size(262, 19);
             this.textBox_CreateTestImage_TargetDir.TabIndex = 0;
@@ -192,6 +200,13 @@
             this.tabPage_CreateFileList.TabIndex = 2;
             this.tabPage_CreateFileList.Text = "CreateFileList";
             this.tabPage_CreateFileList.UseVisualStyleBackColor = true;
+            // 
+            // textBox_CreateFileList
+            // 
+            this.textBox_CreateFileList.Location = new System.Drawing.Point(6, 130);
+            this.textBox_CreateFileList.Name = "textBox_CreateFileList";
+            this.textBox_CreateFileList.Size = new System.Drawing.Size(509, 19);
+            this.textBox_CreateFileList.TabIndex = 1;
             // 
             // textBox_CreateFileListPath_TargetDir
             // 
@@ -210,12 +225,39 @@
             this.button_CreateFileList.UseVisualStyleBackColor = true;
             this.button_CreateFileList.Click += new System.EventHandler(this.button_CreateFileList_Click);
             // 
-            // textBox_CreateFileList
+            // textBox_CreateTestImage_imgCount
             // 
-            this.textBox_CreateFileList.Location = new System.Drawing.Point(6, 130);
-            this.textBox_CreateFileList.Name = "textBox_CreateFileList";
-            this.textBox_CreateFileList.Size = new System.Drawing.Size(509, 19);
-            this.textBox_CreateFileList.TabIndex = 1;
+            this.textBox_CreateTestImage_imgCount.Location = new System.Drawing.Point(204, 29);
+            this.textBox_CreateTestImage_imgCount.Name = "textBox_CreateTestImage_imgCount";
+            this.textBox_CreateTestImage_imgCount.Size = new System.Drawing.Size(64, 19);
+            this.textBox_CreateTestImage_imgCount.TabIndex = 0;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 57);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(53, 12);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "TargetDir";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(96, 14);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(26, 12);
+            this.label3.TabIndex = 3;
+            this.label3.Text = "Size";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(202, 14);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(88, 12);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "imgCout / class";
             // 
             // Form1
             // 
@@ -257,6 +299,10 @@
         private System.Windows.Forms.Button button_CreateFileList;
         private System.Windows.Forms.TextBox textBox_CreateFileListPath_TargetDir;
         private System.Windows.Forms.TextBox textBox_CreateFileList;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox textBox_CreateTestImage_imgCount;
     }
 }
 
